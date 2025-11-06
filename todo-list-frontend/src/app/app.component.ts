@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Todo, TodoService} from "./todo.service";
 import {Observable} from "rxjs";
 
@@ -13,17 +13,34 @@ import {Observable} from "rxjs";
     <div class="list">
       <label for="search">Search...</label>
       <input id="search" type="text">
-      <app-progress-bar></app-progress-bar>
-      <app-todo-item *ngFor="let todo of todos$ | async" [item]="todo"></app-todo-item>
+      <app-progress-bar *ngIf="isLoading"></app-progress-bar>
+      <app-todo-item *ngFor="let todo of todos" [item]="todo"></app-todo-item>
     </div>
   `,
   styleUrls: ['app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-  readonly todos$: Observable<Todo[]>;
+  todos: Todo[] = [];
+  isLoading = false;
 
-  constructor(todoService: TodoService) {
-    this.todos$ = todoService.getAll();
+  constructor(private todoService: TodoService) {}
+
+  ngOnInit(): void {
+    this.loadTodos();
+  }
+
+  loadTodos() {
+    this.isLoading = true;
+    this.todoService.getAll().subscribe({
+      next: (data) => {
+        this.todos = data;
+        this.isLoading = false;
+      },
+      error: () => {
+        console.error('Failed to load todos');
+        this.isLoading = false;
+      }
+    });
   }
 }
