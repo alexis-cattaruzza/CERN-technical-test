@@ -16,5 +16,9 @@ dependencies {
     api group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springBootVersion
     api group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
     runtimeOnly 'com.h2database:h2'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    testCompileOnly 'org.projectlombok:lombok:1.18.30'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
 }

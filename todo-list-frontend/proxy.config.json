@@ -1,6 +1,6 @@
 {
  "/api/*": {
-   "target": "https://localhost:8099",
+   "target": "http://localhost:8099",
    "secure": false,
    "logLevel": "debug",
    "timeout": 1200000
