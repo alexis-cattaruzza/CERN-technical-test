@@ -12,9 +12,15 @@ import {Observable} from "rxjs";
     </div>
     <div class="list">
       <label for="search">Search...</label>
-      <input id="search" type="text">
+      <input 
+        id="search" 
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+      />
       <app-progress-bar *ngIf="isLoading"></app-progress-bar>
-      <app-todo-item *ngFor="let todo of todos" [item]="todo"></app-todo-item>
+      <app-todo-item *ngFor="let todo of filteredTodos" [item]="todo"></app-todo-item>
+      <div class="message" *ngIf="message">{{ message }}</div>
     </div>
   `,
   styleUrls: ['app.component.scss']
@@ -22,7 +28,10 @@ import {Observable} from "rxjs";
 export class AppComponent implements OnInit {
 
   todos: Todo[] = [];
+  filteredTodos: Todo[] = [];
+  searchTerm: string = '';
   isLoading = false;
+  message: string = '';
 
   constructor(private todoService: TodoService) {}
 
@@ -35,6 +44,7 @@ export class AppComponent implements OnInit {
     this.todoService.getAll().subscribe({
       next: (data) => {
         this.todos = data;
+        this.filteredTodos = data;
         this.isLoading = false;
       },
       error: () => {
@@ -42,5 +52,11 @@ export class AppComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  onSearchChange() {
+    const term = this.searchTerm.toLowerCase().trim();
+    this.filteredTodos = this.todos.filter(todo => todo.task.toLowerCase().includes(term));
+    this.message = this.filteredTodos.length ? '' : 'No results found';
   }
 }
