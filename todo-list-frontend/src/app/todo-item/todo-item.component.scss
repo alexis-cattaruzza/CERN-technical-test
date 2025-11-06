@@ -4,6 +4,12 @@
   padding: 12px 0 12px 12px;
   margin-top: 12px;
   border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #c5c3c3;
+  }
 }
 
 .task-indicator {
